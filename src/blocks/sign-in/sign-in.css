@@ -1,4 +1,5 @@
 .sign-in {
+  box-sizing: border-box;
   flex: 1 0 auto;
   display: flex;
   flex-direction: column;
@@ -7,12 +8,13 @@
   align-items: center;
   height: 100%;
   width: 100%;
-  padding: 60px 0 80px 0;
+  padding: 40px 30px 77px 30px;
   margin: 0 auto;
 }
 
 @media (min-width: 768px) {
   .sign-in {
     max-width: 358px;
+    padding: 60px 0 80px 0;
   }
 }
