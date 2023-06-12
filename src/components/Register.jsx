@@ -1,20 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-export const Register = () => {
-  const navigate = useNavigate();
+export const Register = ({ handleSubmit }) => {
+  const [formValue, setFormValue] = useState({
+    email: "",
+    password: "",
+  });
 
-  const onChange = (e) => {
-    console.log("onChange", e);
+  const onChange = ({ target }) => {
+    setFormValue({ ...formValue, [target.name]: target.value });
   };
 
   const onSubmit = (e) => {
-    console.log("onSubmit", e);
-  };
-
-  const login = (e) => {
-    console.log("login", e);
-    navigate("/login", { replace: true });
+    e.preventDefault();
+    handleSubmit(formValue.email, formValue.password);
   };
 
   return (
@@ -31,6 +30,7 @@ export const Register = () => {
         <fieldset className="form__inputs" form="sign_up">
           <label htmlFor="user_email" className="form__label" />
           <input
+            value={formValue.email}
             id="user_email"
             className="form__input form__input_sign-up"
             type="email"
@@ -42,6 +42,7 @@ export const Register = () => {
 
           <label htmlFor="user_email" className="form__label" />
           <input
+            value={formValue.password}
             id="user_password"
             className="form__input form__input_sign-up"
             type="password"

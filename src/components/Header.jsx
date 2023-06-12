@@ -21,7 +21,7 @@ export const Header = () => {
   return (
     <header className="header">
       <img className="header__logo" src={logo} alt="Логотип Mesto" />
-      {isLogging && !context.loggedIn ? (
+      {isLogging && !context.isLoggedIn ? (
         <Link to="/sign-up" className="link header__link">
           Зарегестрироваться
         </Link>

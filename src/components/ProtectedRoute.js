@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 export const ProtectedRoute = ({ element: Component, ...props }) => {
   const context = useContext(AppContext);
   const navigate = useNavigate();
-  return context.loggedIn ? (
+  return context.isLoggedIn ? (
     <Component {...props} />
   ) : (
     navigate("/sign-up", { replace: true })

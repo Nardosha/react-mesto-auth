@@ -10,23 +10,30 @@ import { EditProfilePopup } from "./EditProfilePopup";
 import { EditAvatarPopup } from "./EditAvatarPopup";
 import { AddPlacePopup } from "./AddPlacePopup";
 import { AppContext } from "../contexts/AppContext";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { Register } from "./Register";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { Login } from "./Login";
 import { InfoTooltip } from "./InfoTooltip";
+import * as auth from "../utils/auth";
 
 function App() {
-  const [currentUser, setCurrentUser] = React.useState({
+  const [authUser, setAuthUser] = useState({
+    username: "",
+    password: "",
+  });
+
+  const [currentUser, setCurrentUser] = useState({
     name: "",
     description: "",
     avatar: "",
     _id: null,
   });
+
   const successText = "Вы успешно зарегистрировались!";
   const errorText = "Что-то пошло не так! Попробуйте ещё раз.";
-  const [loggedIn, setLoggedIn] = useState(false);
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
   const [cards, setCards] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -133,6 +140,24 @@ function App() {
     setIsInfoPopupOpen(true);
   };
 
+  const _handleRegister = (email, password) => {
+    auth
+      .register(email, password)
+      .then((res) => {
+        if (!res?.data) {
+          console.log(res);
+          setIsInfoPopupOpen(true);
+          throw Error(res);
+        }
+
+        localStorage.setItem("jwt", res.data._id);
+        setAuthUser({ ...authUser, email: res.data.email, password });
+        setIsLoggedIn(true);
+        navigate("/sign-in", { replace: true });
+      })
+      .catch(console.error);
+  };
+
   useEffect(() => {
     Promise.all([api.loadUserInfo(), api.getInitialCards()])
       .then(([userInfo, cards]) => {
@@ -149,14 +174,17 @@ function App() {
 
   return (
     <div className="root">
-      <AppContext.Provider value={{ loggedIn, isLoading, closeAllPopups }}>
+      <AppContext.Provider value={{ isLoggedIn, isLoading, closeAllPopups }}>
         <CurrentUserContext.Provider value={currentUser}>
           <div className="wrapper">
             <Header />
 
             <Routes>
               <Route path="/" element={<Login handleSubmit={_handleLogin} />} />
-              <Route path="/sign-up" element={<Register />} />
+              <Route
+                path="/sign-up"
+                element={<Register handleSubmit={_handleRegister} />}
+              />
               <Route path="/sign-in" element={<Login />} />
 
               <Route
@@ -179,7 +207,7 @@ function App() {
               />
             </Routes>
 
-            {loggedIn && <Footer />}
+            {isLoggedIn && <Footer />}
           </div>
 
           <EditProfilePopup
@@ -205,7 +233,10 @@ function App() {
 
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />
 
-          <InfoTooltip type="error" isOpen={isInfoPopupOpen} />
+          <InfoTooltip
+            type={isLoggedIn ? "success" : "error"}
+            isOpen={isInfoPopupOpen}
+          />
         </CurrentUserContext.Provider>
       </AppContext.Provider>
     </div>
