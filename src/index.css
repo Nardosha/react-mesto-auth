@@ -5,10 +5,12 @@
 /* ----- BLOCKS ----- */
 @import 'blocks/root/root.css';
 @import 'blocks/wrapper/wrapper.css';
-@import 'blocks/button/button.css';
+@import 'blocks/link/link.css';
+@import 'blocks/icon-button/icon-button.css';
 
 @import 'blocks/header/header.css';
 @import 'blocks/header/__logo/header__logo.css';
+@import 'blocks/header/__link/header__link.css';
 
 @import 'blocks/page/page.css';
 
@@ -61,3 +63,9 @@
 @import 'blocks/form/__button-submit/_type/form__button-submit_type_disabled.css';
 
 @import 'blocks/popup/_opened/popup_opened.css';
+
+@import "blocks/sign/sign.css";
+@import "blocks/sign/__title/sign__title.css";
+@import "blocks/sign/__form/sign__form.css";
+
+@import "blocks/sign-form/sign-form.css";
