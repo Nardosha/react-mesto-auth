@@ -1,23 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import { Header } from './Header';
-import { Footer } from './Footer';
-import { Main } from './Main';
-import { PopupWithForm } from './PopupWithForm';
-import { ImagePopup } from './ImagePopup';
-import { api } from '../utils/api';
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { EditProfilePopup } from './EditProfilePopup';
-import { EditAvatarPopup } from './EditAvatarPopup';
-import { AddPlacePopup } from './AddPlacePopup';
-import { AppContext } from '../contexts/AppContext';
+import React, { useEffect, useState } from "react";
+import { Header } from "./Header";
+import { Footer } from "./Footer";
+import { Main } from "./Main";
+import { PopupWithForm } from "./PopupWithForm";
+import { ImagePopup } from "./ImagePopup";
+import { api } from "../utils/api";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import { EditProfilePopup } from "./EditProfilePopup";
+import { EditAvatarPopup } from "./EditAvatarPopup";
+import { AddPlacePopup } from "./AddPlacePopup";
+import { AppContext } from "../contexts/AppContext";
+import { Route, Routes } from "react-router-dom";
+import { Register } from "./Register";
+import { ProtectedRoute } from "./ProtectedRoute";
+import { Login } from "./Login";
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState({
-    name: '',
-    description: '',
-    avatar: '',
+    name: "",
+    description: "",
+    avatar: "",
     _id: null,
   });
+
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const [cards, setCards] = useState([]);
 
@@ -48,11 +54,11 @@ function App() {
     setSelectedCard(null);
   };
 
-  const _handleCardClick = card => {
+  const _handleCardClick = (card) => {
     setSelectedCard(card);
   };
 
-  const handleRequest = request => {
+  const handleRequest = (request) => {
     setIsLoading(true);
 
     request()
@@ -63,7 +69,7 @@ function App() {
 
   const _handleUpdateUser = ({ name, description }) => {
     const submitEditUserProfile = () => {
-      return api.editUserInfo({ name, about: description }).then(res => {
+      return api.editUserInfo({ name, about: description }).then((res) => {
         setCurrentUser({
           ...currentUser,
           name: res.name,
@@ -77,7 +83,7 @@ function App() {
 
   const _handleUpdateAvatar = ({ avatar }) => {
     const submitEditUserAvatar = () => {
-      return api.editUserAvatar({ avatar }).then(user => {
+      return api.editUserAvatar({ avatar }).then((user) => {
         setCurrentUser({ ...currentUser, avatar: user.avatar });
       });
     };
@@ -85,9 +91,9 @@ function App() {
     handleRequest(submitEditUserAvatar);
   };
 
-  const _handleAddPlaceSubmit = card => {
+  const _handleAddPlaceSubmit = (card) => {
     const submitAddPlace = () => {
-      return api.createCard(card).then(newCard => {
+      return api.createCard(card).then((newCard) => {
         setCards([newCard, ...cards]);
       });
     };
@@ -95,24 +101,26 @@ function App() {
     handleRequest(submitAddPlace);
   };
 
-  const _handleCardLike = card => {
-    const isLiked = card.likes.find(user => user._id === currentUser._id);
+  const _handleCardLike = (card) => {
+    const isLiked = card.likes.find((user) => user._id === currentUser._id);
 
     api
       .changeLikeCardStatus(card._id, !isLiked)
-      .then(newCard => {
-        setCards(state =>
-          state.map(card => (card._id === newCard._id ? newCard : card)),
+      .then((newCard) => {
+        setCards((state) =>
+          state.map((card) => (card._id === newCard._id ? newCard : card))
         );
       })
       .catch(console.error);
   };
 
-  const _handleDeleteCard = deletedCard => {
+  const _handleDeleteCard = (deletedCard) => {
     api
       .deleteCard(deletedCard._id)
       .then(() => {
-        setCards(state => state.filter(card => card._id !== deletedCard._id));
+        setCards((state) =>
+          state.filter((card) => card._id !== deletedCard._id)
+        );
       })
       .catch(console.error);
   };
@@ -133,22 +141,37 @@ function App() {
 
   return (
     <div className="root">
-      <AppContext.Provider value={{ isLoading, closeAllPopups }}>
+      <AppContext.Provider value={{ loggedIn, isLoading, closeAllPopups }}>
         <CurrentUserContext.Provider value={currentUser}>
           <div className="wrapper">
             <Header />
 
-            <Main
-              cards={cards}
-              onEditProfile={_handleEditProfileClick}
-              onAddPlace={_handleAddPlaceClick}
-              onEditAvatar={_handleEditAvatarClick}
-              onCardClick={_handleCardClick}
-              onCardLike={_handleCardLike}
-              onCardDelete={_handleDeleteCard}
-            />
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path="/sign-up" element={<Register />} />
+              <Route path="/sign-in" element={<Login />} />
 
-            <Footer />
+              <Route
+                path="/main"
+                element={
+                  <ProtectedRoute
+                    element={
+                      <Main
+                        cards={cards}
+                        onEditProfile={_handleEditProfileClick}
+                        onAddPlace={_handleAddPlaceClick}
+                        onEditAvatar={_handleEditAvatarClick}
+                        onCardClick={_handleCardClick}
+                        onCardLike={_handleCardLike}
+                        onCardDelete={_handleDeleteCard}
+                      />
+                    }
+                  />
+                }
+              />
+            </Routes>
+
+            {loggedIn && <Footer />}
           </div>
 
           <EditProfilePopup
