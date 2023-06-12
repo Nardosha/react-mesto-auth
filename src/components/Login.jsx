@@ -1,13 +1,14 @@
 import React from "react";
-import { sectionOptions } from "../utils/constants";
 
-export const Login = () => {
+export const Login = (props) => {
   const onChange = (e) => {
     console.log("onChange", e);
   };
 
   const onSubmit = (e) => {
+    e.preventDefault();
     console.log("onSubmit", e);
+    props.handleSubmit();
   };
 
   return (
@@ -48,7 +49,7 @@ export const Login = () => {
         <button
           className="form__button-submit form__button-submit_color_white"
           type="submit"
-          id="form_button_submit"
+          id="sign-in_form_button_submit"
         >
           Войти
         </button>

@@ -14,6 +14,7 @@ import { Route, Routes } from "react-router-dom";
 import { Register } from "./Register";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { Login } from "./Login";
+import { InfoTooltip } from "./InfoTooltip";
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState({
@@ -22,7 +23,8 @@ function App() {
     avatar: "",
     _id: null,
   });
-
+  const successText = "Вы успешно зарегистрировались!";
+  const errorText = "Что-то пошло не так! Попробуйте ещё раз.";
   const [loggedIn, setLoggedIn] = useState(false);
 
   const [cards, setCards] = useState([]);
@@ -32,6 +34,7 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
+  const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
 
   const _handleEditAvatarClick = () => {
@@ -51,6 +54,7 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setIsConfirmPopupOpen(false);
+    setIsInfoPopupOpen(false);
     setSelectedCard(null);
   };
 
@@ -125,6 +129,10 @@ function App() {
       .catch(console.error);
   };
 
+  const _handleLogin = () => {
+    setIsInfoPopupOpen(true);
+  };
+
   useEffect(() => {
     Promise.all([api.loadUserInfo(), api.getInitialCards()])
       .then(([userInfo, cards]) => {
@@ -147,7 +155,7 @@ function App() {
             <Header />
 
             <Routes>
-              <Route path="/" element={<Login />} />
+              <Route path="/" element={<Login handleSubmit={_handleLogin} />} />
               <Route path="/sign-up" element={<Register />} />
               <Route path="/sign-in" element={<Login />} />
 
@@ -196,6 +204,8 @@ function App() {
           />
 
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+
+          <InfoTooltip type="error" isOpen={isInfoPopupOpen} />
         </CurrentUserContext.Provider>
       </AppContext.Provider>
     </div>
