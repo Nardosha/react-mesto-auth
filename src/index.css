@@ -46,6 +46,9 @@
 @import 'blocks/popup/__button-close/form__button-close.css';
 @import 'blocks/popup/__title/popup__title.css';
 @import 'blocks/popup/__form/popup__form.css';
+@import 'blocks/popup/__info/popup__info.css';
+@import 'blocks/popup/__info/_type/popup__info_type_success.css';
+@import 'blocks/popup/__info/_type/popup__info_type_error.css';
 
 @import 'blocks/popup-show-photo/popup-show-photo.css';
 @import 'blocks/popup-show-photo/__container/popup-show-photo__container.css';
