@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -18,11 +18,11 @@ export const Register = () => {
   };
 
   return (
-    <section className="sign">
-      <h1 className="sign__title">Регистрация</h1>
+    <section className="sign-up">
+      <h1 className="sign-up__title">Регистрация</h1>
 
       <form
-        className="sign__form form"
+        className="sign-up__form form"
         action="#"
         name="sign_up"
         id="sign_up"
@@ -61,9 +61,9 @@ export const Register = () => {
         </button>
       </form>
 
-      <a className="link" onClick={login}>
-        Уже зарегистрированы? Войти{" "}
-      </a>
+      <Link to="/sign-in" className="link">
+        Уже зарегистрированы? Войти
+      </Link>
     </section>
   );
 };

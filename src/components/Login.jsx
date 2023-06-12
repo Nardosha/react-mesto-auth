@@ -1,4 +1,5 @@
 import React from "react";
+import { sectionOptions } from "../utils/constants";
 
 export const Login = () => {
   const onChange = (e) => {
@@ -10,46 +11,48 @@ export const Login = () => {
   };
 
   return (
-    <form
-      className="form"
-      action="#"
-      name="login"
-      id="login"
-      onSubmit={onSubmit}
-    >
-      <h1 className="form__title">Вход</h1>
+    <section className="sign-in">
+      <h1 className="sign-in__title">Вход</h1>
 
-      <fieldset className="form__inputs" form="login">
-        <label htmlFor="user_email" className="form__label" />
-        <input
-          id="user_email"
-          className="form__input"
-          type="email"
-          name="email"
-          placeholder="Email"
-          required
-          onChange={onChange}
-        />
-
-        <label htmlFor="user_email" className="form__label" />
-        <input
-          id="user_password"
-          className="form__input"
-          type="password"
-          name="password"
-          placeholder="Password"
-          required
-          onChange={onChange}
-        />
-      </fieldset>
-
-      <button
-        className="form__button-submit"
-        type="submit"
-        id="form_button_submit"
+      <form
+        className="sign-in__form form"
+        action="#"
+        name="sign-in"
+        id="sign-in"
+        onSubmit={onSubmit}
       >
-        Войти
-      </button>
-    </form>
+        <fieldset className="form__inputs" form="sign-in">
+          <label htmlFor="user_email" className="form__label" />
+          <input
+            id="user_email"
+            className="form__input form__input_sign-in"
+            type="email"
+            name="email"
+            placeholder="Email"
+            required
+            onChange={onChange}
+          />
+
+          <label htmlFor="user_email" className="form__label" />
+          <input
+            id="user_password"
+            className="form__input form__input_sign-in"
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+            onChange={onChange}
+          />
+        </fieldset>
+
+        <button
+          className="form__button-submit form__button-submit_color_white"
+          type="submit"
+          id="form_button_submit"
+        >
+          Войти
+        </button>
+      </form>
+    </section>
   );
 };

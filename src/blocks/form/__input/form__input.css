@@ -24,6 +24,8 @@
     color: #ccc;
 }
 
-.form__input_popup-form {
-
+.form__input_sign-in {
+    background: black;
+    border-bottom:  1px solid #ccc;
+    color: #ccc;
 }
