@@ -10,7 +10,7 @@ import { EditProfilePopup } from "./EditProfilePopup";
 import { EditAvatarPopup } from "./EditAvatarPopup";
 import { AddPlacePopup } from "./AddPlacePopup";
 import { AppContext } from "../contexts/AppContext";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { Register } from "./Register";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { Login } from "./Login";
@@ -19,7 +19,7 @@ import * as auth from "../utils/auth";
 
 function App() {
   const [authUser, setAuthUser] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
@@ -136,26 +136,37 @@ function App() {
       .catch(console.error);
   };
 
-  const _handleLogin = () => {
-    setIsInfoPopupOpen(true);
-  };
-
-  const _handleRegister = (email, password) => {
+  const onRegister = (email, password) => {
     auth
       .register(email, password)
       .then((res) => {
         if (!res?.data) {
-          console.log(res);
-          setIsInfoPopupOpen(true);
           throw Error(res);
         }
 
-        localStorage.setItem("jwt", res.data._id);
-        setAuthUser({ ...authUser, email: res.data.email, password });
         setIsLoggedIn(true);
+        setAuthUser({ email: res.data.email, password: password });
         navigate("/sign-in", { replace: true });
       })
-      .catch(console.error);
+      .catch((err) => {
+        console.log("kek", err);
+        setIsInfoPopupOpen(true);
+      });
+  };
+
+  const handleLogin = (userData) => {
+    console.log(userData);
+    setIsLoggedIn(true);
+    if (!userData) return;
+    setAuthUser({ email: userData.email, password: userData.password });
+    setIsInfoPopupOpen(true);
+  };
+  console.log(authUser, isInfoPopupOpen);
+
+  const onSignOut = () => {
+    setIsLoggedIn(false);
+    localStorage.removeItem("jwt");
+    navigate("/", { replace: true });
   };
 
   useEffect(() => {
@@ -174,34 +185,43 @@ function App() {
 
   return (
     <div className="root">
-      <AppContext.Provider value={{ isLoggedIn, isLoading, closeAllPopups }}>
+      <AppContext.Provider
+        value={{ isLoggedIn, isLoading, handleLogin, closeAllPopups }}
+      >
         <CurrentUserContext.Provider value={currentUser}>
           <div className="wrapper">
             <Header />
 
             <Routes>
-              <Route path="/" element={<Login handleSubmit={_handleLogin} />} />
+              <Route
+                path="/"
+                element={
+                  isLoggedIn ? (
+                    <Navigate to="/me" replace />
+                  ) : (
+                    <Navigate to="/sign-in" replace />
+                  )
+                }
+              />
+
               <Route
                 path="/sign-up"
-                element={<Register handleSubmit={_handleRegister} />}
+                element={<Register onRegister={onRegister} />}
               />
               <Route path="/sign-in" element={<Login />} />
 
               <Route
-                path="/main"
+                path="/me"
                 element={
                   <ProtectedRoute
-                    element={
-                      <Main
-                        cards={cards}
-                        onEditProfile={_handleEditProfileClick}
-                        onAddPlace={_handleAddPlaceClick}
-                        onEditAvatar={_handleEditAvatarClick}
-                        onCardClick={_handleCardClick}
-                        onCardLike={_handleCardLike}
-                        onCardDelete={_handleDeleteCard}
-                      />
-                    }
+                    element={Main}
+                    cards={cards}
+                    onEditProfile={_handleEditProfileClick}
+                    onAddPlace={_handleAddPlaceClick}
+                    onEditAvatar={_handleEditAvatarClick}
+                    onCardClick={_handleCardClick}
+                    onCardLike={_handleCardLike}
+                    onCardDelete={_handleDeleteCard}
                   />
                 }
               />

@@ -6,6 +6,8 @@ import { AppContext } from "../contexts/AppContext";
 export const InfoTooltip = ({ type, isOpen }) => {
   const { closeAllPopups } = useContext(AppContext);
 
+  console.log(type, isOpen);
+
   usePopupClose(isOpen, closeAllPopups);
 
   const infoText = useCallback(() => {

@@ -18,7 +18,7 @@ export function register(email, password) {
     .catch(console.error);
 }
 
-export function signIn(email, password) {
+export function authorize(email, password) {
   return fetch(`${BASE_URL}/signin`, {
     method: "POST",
     headers: {

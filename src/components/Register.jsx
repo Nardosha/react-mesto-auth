@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import * as auth from "../utils/auth";
 
-export const Register = ({ handleSubmit }) => {
+export const Register = ({ onRegister }) => {
   const [formValue, setFormValue] = useState({
     email: "",
     password: "",
@@ -13,7 +14,7 @@ export const Register = ({ handleSubmit }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    handleSubmit(formValue.email, formValue.password);
+    onRegister(formValue.email, formValue.password);
   };
 
   return (
