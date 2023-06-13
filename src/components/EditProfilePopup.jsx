@@ -44,7 +44,7 @@ export const EditProfilePopup = ({ isOpen, onUpdateUser }) => {
       <fieldset className="form__inputs" form="form_profile">
         <label className="form__label" htmlFor="input_user_full_name">
           <input
-            className="form__input form__input_field_user-full-name"
+            className="form__input form__input_popup-form form__input_field_user-full-name"
             id="input_user_full_name"
             data-user-field="userFullName"
             name="name"

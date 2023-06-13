@@ -1,4 +1,4 @@
-.button {
+.icon-button {
     cursor: pointer;
     background-color: transparent;
     display: flex;
@@ -9,6 +9,6 @@
     transition: all .3s ease-in;
 }
 
-.button:hover {
+.icon-button:hover {
     opacity: .6;
 }
