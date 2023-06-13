@@ -20,6 +20,11 @@ export const Register = () => {
     auth
       .register(formValue.email, formValue.password)
       .then((res) => {
+        if (!res?.data) {
+          context.handleRegister(null);
+          return;
+        }
+
         context.handleRegister(formValue.email, formValue.password);
         navigate("/sign-in", { replace: true });
       })

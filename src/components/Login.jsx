@@ -21,9 +21,7 @@ export const Login = () => {
     auth
       .authorize(formValue.email, formValue.password)
       .then((res) => {
-        console.log(res);
-
-        if (res.token) {
+        if (res?.token) {
           localStorage.setItem("jwt", res.token);
           setFormValue({ email: "", password: "" });
           context.handleLogin(formValue);

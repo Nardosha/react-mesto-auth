@@ -149,7 +149,10 @@ function App() {
   };
 
   const handleRegister = (userData) => {
-    if (!userData) return;
+    if (!userData) {
+      setIsInfoPopupOpen(true);
+      return
+    }
     setIsInfoPopupOpen(true);
     setIsLoggedIn(true);
     setAuthUser({ email: userData.email, password: userData.password });
