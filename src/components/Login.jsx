@@ -5,8 +5,8 @@ import * as auth from "../utils/auth";
 
 export const Login = () => {
   const [formValue, setFormValue] = useState({
-    email: "lalabumlala@gmail.com",
-    password: "Nardosha2345",
+    email: "",
+    password: "",
   });
 
   const navigate = useNavigate();

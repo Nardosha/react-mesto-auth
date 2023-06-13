@@ -1,6 +1,5 @@
-import React, { useContext } from 'react';
+import React  from 'react';
 import { popupOptions } from '../utils/constants';
-import { AppContext } from '../contexts/AppContext';
 import { usePopupClose } from '../hooks/usePopupClose';
 
 export const PopupWithForm = props => {
