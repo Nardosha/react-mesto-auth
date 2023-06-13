@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { AppContext } from "../contexts/AppContext";
 import * as auth from "../utils/auth";
 
-export const Register = ({ onRegister }) => {
+export const Register = () => {
+  const context = useContext(AppContext);
+  const navigate = useNavigate();
   const [formValue, setFormValue] = useState({
     email: "",
     password: "",
@@ -14,7 +17,13 @@ export const Register = ({ onRegister }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    onRegister(formValue.email, formValue.password);
+    auth
+      .register(formValue.email, formValue.password)
+      .then((res) => {
+        context.handleRegister(formValue.email, formValue.password);
+        navigate("/sign-in", { replace: true });
+      })
+      .catch(console.error);
   };
 
   return (

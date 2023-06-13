@@ -13,7 +13,6 @@ export const Header = () => {
 
   const [isLogging, setIsLogging] = useState(setLocation);
 
-
   useEffect(() => {
     setIsLogging(setLocation);
   });
@@ -28,6 +27,12 @@ export const Header = () => {
       ) : (
         <Link to="/sign-in" className="link header__link">
           Войти
+        </Link>
+      )}
+
+      {context.isLoggedIn && (
+        <Link to="/sign-in" className="link header__link" onClick={context.handleSignOut}>
+          Выйти
         </Link>
       )}
     </header>

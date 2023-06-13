@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
-import * as auth from "../utils/auth";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../contexts/AppContext";
+import * as auth from "../utils/auth";
 
 export const Login = () => {
   const [formValue, setFormValue] = useState({
@@ -18,16 +18,19 @@ export const Login = () => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    auth.authorize(formValue.email, formValue.password).then((res) => {
-      console.log(res);
+    auth
+      .authorize(formValue.email, formValue.password)
+      .then((res) => {
+        console.log(res);
 
-      if (res.token) {
-        localStorage.setItem("jwt", res.token);
-        setFormValue({ email: "", password: "" });
-        context.handleLogin(formValue);
-        navigate("/", { replace: true });
-      }
-    });
+        if (res.token) {
+          localStorage.setItem("jwt", res.token);
+          setFormValue({ email: "", password: "" });
+          context.handleLogin(formValue);
+          navigate("/", { replace: true });
+        }
+      })
+      .catch(console.error);
   };
 
   return (

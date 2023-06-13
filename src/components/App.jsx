@@ -30,8 +30,6 @@ function App() {
     _id: null,
   });
 
-  const successText = "Вы успешно зарегистрировались!";
-  const errorText = "Что-то пошло не так! Попробуйте ещё раз.";
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const [cards, setCards] = useState([]);
@@ -136,29 +134,17 @@ function App() {
       .catch(console.error);
   };
 
-  const onRegister = (email, password) => {
-    auth
-      .register(email, password)
-      .then((res) => {
-        if (!res?.data) {
-          throw Error(res);
-        }
-
-        setIsLoggedIn(true);
-        setAuthUser({ email: res.data.email, password: password });
-        navigate("/sign-in", { replace: true });
-      })
-      .catch((err) => {
-        console.log("onRegister ERROR", err);
-        setIsInfoPopupOpen(true);
-      });
+  const handleRegister = (userData) => {
+    if (!userData) return;
+    setIsInfoPopupOpen(true);
+    setIsLoggedIn(true);
+    setAuthUser({ email: userData.email, password: userData.password });
   };
 
   const handleLogin = (userData) => {
-    setIsLoggedIn(true);
     if (!userData) return;
+    setIsLoggedIn(true);
     setAuthUser({ email: userData.email, password: userData.password });
-    setIsInfoPopupOpen(true);
   };
 
   const checkToken = () => {
@@ -166,18 +152,21 @@ function App() {
     return auth
       .checkToken(token)
       .then((res) => {
-        console.log(token, res);
+        if (!res) return;
+
         setIsLoggedIn(true);
         navigate("/me", { replace: true });
       })
-      .catch((err) => {
-        console.log("err", err);
-      });
+      .catch(console.error);
   };
 
-  const onSignOut = () => {
+  const handleSignOut = () => {
     setIsLoggedIn(false);
+    setAuthUser({ email: "", password: "" });
+    setCurrentUser({ name: "", description: "", avatar: "", _id: null });
+
     localStorage.removeItem("jwt");
+
     navigate("/", { replace: true });
   };
 
@@ -212,7 +201,14 @@ function App() {
   return (
     <div className="root">
       <AppContext.Provider
-        value={{ isLoggedIn, isLoading, handleLogin, closeAllPopups }}
+        value={{
+          isLoggedIn,
+          isLoading,
+          handleLogin,
+          handleRegister,
+          handleSignOut,
+          closeAllPopups,
+        }}
       >
         <CurrentUserContext.Provider value={currentUser}>
           <div className="wrapper">
@@ -230,10 +226,7 @@ function App() {
                 }
               />
 
-              <Route
-                path="/sign-up"
-                element={<Register onRegister={onRegister} />}
-              />
+              <Route path="/sign-up" element={<Register />} />
               <Route path="/sign-in" element={<Login />} />
 
               <Route
