@@ -149,19 +149,31 @@ function App() {
         navigate("/sign-in", { replace: true });
       })
       .catch((err) => {
-        console.log("kek", err);
+        console.log("onRegister ERROR", err);
         setIsInfoPopupOpen(true);
       });
   };
 
   const handleLogin = (userData) => {
-    console.log(userData);
     setIsLoggedIn(true);
     if (!userData) return;
     setAuthUser({ email: userData.email, password: userData.password });
     setIsInfoPopupOpen(true);
   };
-  console.log(authUser, isInfoPopupOpen);
+
+  const checkToken = () => {
+    const token = localStorage.getItem("jwt");
+    return auth
+      .checkToken(token)
+      .then((res) => {
+        console.log(token, res);
+        setIsLoggedIn(true);
+        navigate("/me", { replace: true });
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  };
 
   const onSignOut = () => {
     setIsLoggedIn(false);
@@ -169,9 +181,11 @@ function App() {
     navigate("/", { replace: true });
   };
 
-  useEffect(() => {
+  const loadData = () => {
+    console.log("loadData");
     Promise.all([api.loadUserInfo(), api.getInitialCards()])
       .then(([userInfo, cards]) => {
+        console.log("loadData then");
         setCurrentUser({
           name: userInfo.name,
           description: userInfo.about,
@@ -181,6 +195,18 @@ function App() {
         setCards([...cards]);
       })
       .catch(console.error);
+  };
+
+  useEffect(() => {
+    checkToken()
+      .then(() => {
+        loadData();
+      })
+      .catch(console.error);
+
+    return () => {
+      setIsLoggedIn(false);
+    };
   }, []);
 
   return (

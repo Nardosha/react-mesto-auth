@@ -36,14 +36,13 @@ export function authorize(email, password) {
 }
 
 export function checkToken(token) {
-  return fetch(`${BASE_URL}//users/me`, {
+  return fetch(`${BASE_URL}/users/me`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
   })
-    .then((res) => res.json())
     .then((res) => {
       if (res.ok) {
         return res.json();
