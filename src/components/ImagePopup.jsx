@@ -18,7 +18,7 @@ export const ImagePopup = ({ card }) => {
     >
       <div className="popup-show-photo__container">
         <button
-          className="button popup__button-close"
+          className="icon-button popup__button-close"
           type="button"
           data-action="CLOSE"
           aria-label="Закрыть"

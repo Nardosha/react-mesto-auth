@@ -39,7 +39,7 @@ export const Main = ({
               {currentUser.description}
             </p>
             <button
-              className="button profile__edit-button"
+              className="icon-button profile__edit-button"
               data-action="OPEN"
               data-action-type="EDIT"
               type="button"
@@ -49,7 +49,7 @@ export const Main = ({
           </div>
         </div>
         <button
-          className="button profile__add-button"
+          className="icon-button profile__add-button"
           type="button"
           aria-label="Загрузить"
           data-action="OPEN"

@@ -11,7 +11,7 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
     <li className="photo-item">
       {isOwn && (
         <button
-          className="button photo-item__button-delete"
+          className="icon-button photo-item__button-delete"
           type="button"
           aria-label="Удалить"
           data-action="DELETE"
@@ -31,7 +31,7 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
 
         <div className="photo-item__like-stats">
           <button
-            className={`button photo-item__button-like ${
+            className={`icon-button photo-item__button-like ${
               isLiked && cardOptions.buttonLikeActiveClass
             }`}
             type="button"

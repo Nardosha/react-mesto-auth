@@ -1,6 +1,5 @@
-import React, { useContext } from 'react';
+import React  from 'react';
 import { popupOptions } from '../utils/constants';
-import { AppContext } from '../contexts/AppContext';
 import { usePopupClose } from '../hooks/usePopupClose';
 
 export const PopupWithForm = props => {
@@ -17,7 +16,7 @@ export const PopupWithForm = props => {
     >
       <div className="popup__container">
         <button
-          className="button popup__button-close"
+          className="icon-button popup__button-close"
           type="button"
           data-action="CLOSE"
           aria-label="Закрыть"
@@ -36,7 +35,7 @@ export const PopupWithForm = props => {
           {props.children}
 
           <button
-            className="form__button-submit"
+            className="form__button-submit form__button-submit_color_black"
             type="submit"
             id="form_button_submit"
             data-action="SUBMIT"
