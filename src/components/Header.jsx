@@ -20,18 +20,24 @@ export const Header = () => {
   return (
     <header className="header">
       <img className="header__logo" src={logo} alt="Логотип Mesto" />
-      {isLogging && !context.isLoggedIn ? (
+      {isLogging && !context.isLoggedIn && (
         <Link to="/sign-up" className="link header__link">
           Зарегестрироваться
         </Link>
-      ) : (
+      )}
+
+      {!isLogging && !context.isLoggedIn && (
         <Link to="/sign-in" className="link header__link">
           Войти
         </Link>
       )}
 
       {context.isLoggedIn && (
-        <Link to="/sign-in" className="link header__link" onClick={context.handleSignOut}>
+        <Link
+          to="/sign-in"
+          className="link header__link"
+          onClick={context.handleSignOut}
+        >
           Выйти
         </Link>
       )}

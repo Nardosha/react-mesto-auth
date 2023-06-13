@@ -134,6 +134,20 @@ function App() {
       .catch(console.error);
   };
 
+  const loadData = () => {
+    Promise.all([api.loadUserInfo(), api.getInitialCards()])
+      .then(([userInfo, cards]) => {
+        setCurrentUser({
+          name: userInfo.name,
+          description: userInfo.about,
+          avatar: userInfo.avatar,
+          _id: userInfo._id,
+        });
+        setCards([...cards]);
+      })
+      .catch(console.error);
+  };
+
   const handleRegister = (userData) => {
     if (!userData) return;
     setIsInfoPopupOpen(true);
@@ -145,6 +159,7 @@ function App() {
     if (!userData) return;
     setIsLoggedIn(true);
     setAuthUser({ email: userData.email, password: userData.password });
+    loadData();
   };
 
   const checkToken = () => {
@@ -168,22 +183,6 @@ function App() {
     localStorage.removeItem("jwt");
 
     navigate("/", { replace: true });
-  };
-
-  const loadData = () => {
-    console.log("loadData");
-    Promise.all([api.loadUserInfo(), api.getInitialCards()])
-      .then(([userInfo, cards]) => {
-        console.log("loadData then");
-        setCurrentUser({
-          name: userInfo.name,
-          description: userInfo.about,
-          avatar: userInfo.avatar,
-          _id: userInfo._id,
-        });
-        setCards([...cards]);
-      })
-      .catch(console.error);
   };
 
   useEffect(() => {
