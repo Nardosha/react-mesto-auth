@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/mesto-react-auth.iml" filepath="$PROJECT_DIR$/.idea/mesto-react-auth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/react-mesto-auth.iml" filepath="$PROJECT_DIR$/.idea/react-mesto-auth.iml" />
     </modules>
   </component>
 </project>
