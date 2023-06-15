@@ -7,7 +7,7 @@ export const EditAvatarPopup = ({ isOpen, onUpdateAvatar }) => {
 
   const avatarLinkRef = useRef();
 
-  const _handleSubmit = e => {
+  const _handleSubmit = (e) => {
     e.preventDefault();
 
     onUpdateAvatar({ avatar: avatarLinkRef.current.value });
@@ -34,10 +34,7 @@ export const EditAvatarPopup = ({ isOpen, onUpdateAvatar }) => {
             required
           />
 
-          <span
-            className="form__input-error"
-            id="input_avatar_src-error"
-          ></span>
+          <span className="form__input-error" id="input_avatar_src-error"></span>
         </label>
       </fieldset>
     </PopupWithForm>

@@ -1,7 +1,7 @@
-import React, { useCallback, useContext } from "react";
-import { popupOptions } from "../utils/constants";
-import { usePopupClose } from "../hooks/usePopupClose";
-import { AppContext } from "../contexts/AppContext";
+import React, { useCallback, useContext } from 'react';
+import { popupOptions } from '../utils/constants';
+import { usePopupClose } from '../hooks/usePopupClose';
+import { AppContext } from '../contexts/AppContext';
 
 export const InfoTooltip = ({ type, isOpen }) => {
   const { closeAllPopups } = useContext(AppContext);
@@ -9,17 +9,13 @@ export const InfoTooltip = ({ type, isOpen }) => {
   usePopupClose(isOpen, closeAllPopups);
 
   const infoText = useCallback(() => {
-    return type === "error"
-      ? "Что-то пошло не так! Попробуйте ещё раз."
-      : "Вы успешно зарегистрировались!";
+    return type === 'error'
+      ? 'Что-то пошло не так! Попробуйте ещё раз.'
+      : 'Вы успешно зарегистрировались!';
   }, [type]);
 
   return (
-    <dialog
-      className={`popup popup_type_info ${
-        isOpen ? popupOptions.openedPopupClass : ""
-      }`}
-    >
+    <dialog className={`popup popup_type_info ${isOpen ? popupOptions.openedPopupClass : ''}`}>
       <div className="popup__container">
         <button
           className="icon-button popup__button-close"
