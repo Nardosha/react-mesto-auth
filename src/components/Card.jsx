@@ -22,7 +22,7 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
       <img
         className="photo-item__img"
         src={card.link}
-        alt="Описание фото"
+        alt={card.name}
         data-action="PREVIEW"
         onClick={() => onCardClick(card)}
       />

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="07f6e39a-d70a-43c0-be90-db162fa3a4cd" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+    <list default="true" id="07f6e39a-d70a-43c0-be90-db162fa3a4cd" name="Changes" comment="style: add new styles">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Card.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Card.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,7 +75,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="fe4a0656-2639-487e-9e29-bd261772ea32" name="Changes" comment="" />
+      <changelist id="07f6e39a-d70a-43c0-be90-db162fa3a4cd" name="Changes" comment="style: add new styles" />
       <created>1686482869005</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -83,6 +85,7 @@
       <workItem from="1686602116136" duration="7106000" />
       <workItem from="1686691304761" duration="9689000" />
       <workItem from="1686727948485" duration="310000" />
+      <workItem from="1686816469012" duration="140000" />
     </task>
     <task id="LOCAL-00001" summary="style: add new styles">
       <created>1686576680554</created>
