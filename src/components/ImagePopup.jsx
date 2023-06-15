@@ -10,9 +10,7 @@ export const ImagePopup = ({ card }) => {
 
   return (
     <dialog
-      className={`popup popup-show-photo ${
-        card?.link ? popupOptions.openedPopupClass : ''
-      }`}
+      className={`popup popup-show-photo ${card?.link ? popupOptions.openedPopupClass : ''}`}
       data-popup-type="SHOW"
       open
     >
@@ -25,11 +23,7 @@ export const ImagePopup = ({ card }) => {
           onClick={closeAllPopups}
         />
 
-        <img
-          className="popup-show-photo__photo"
-          src={card?.link}
-          alt={card?.name}
-        />
+        <img className="popup-show-photo__photo" src={card?.link} alt={card?.name} />
         <h2 className="popup-show-photo__description">{card?.name}</h2>
       </div>
     </dialog>

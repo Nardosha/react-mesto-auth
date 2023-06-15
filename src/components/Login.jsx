@@ -1,10 +1,10 @@
-import React, { useContext, useState } from "react";
-import { AppContext } from "../contexts/AppContext";
+import React, { useContext, useState } from 'react';
+import { AppContext } from '../contexts/AppContext';
 
 export const Login = () => {
   const [formValue, setFormValue] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
 
   const context = useContext(AppContext);
@@ -15,7 +15,7 @@ export const Login = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     context.handleLogin(formValue);
-    setFormValue({ email: "", password: "" });
+    setFormValue({ email: '', password: '' });
   };
 
   return (

@@ -1,17 +1,15 @@
-import React  from 'react';
+import React from 'react';
 import { popupOptions } from '../utils/constants';
 import { usePopupClose } from '../hooks/usePopupClose';
 
-export const PopupWithForm = props => {
+export const PopupWithForm = (props) => {
   const { name, title, submitButtonText, isOpen, onClose, onSubmit } = props;
 
   usePopupClose(isOpen, onClose);
 
   return (
     <dialog
-      className={`popup popup_type_${name} ${
-        isOpen ? popupOptions.openedPopupClass : ''
-      }`}
+      className={`popup popup_type_${name} ${isOpen ? popupOptions.openedPopupClass : ''}`}
       open
     >
       <div className="popup__container">
@@ -25,13 +23,7 @@ export const PopupWithForm = props => {
 
         <h2 className="popup__title">{title}</h2>
 
-        <form
-          className="popup__form form"
-          action="#"
-          name={name}
-          id={name}
-          onSubmit={onSubmit}
-        >
+        <form className="popup__form form" action="#" name={name} id={name} onSubmit={onSubmit}>
           {props.children}
 
           <button

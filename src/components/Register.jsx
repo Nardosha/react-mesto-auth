@@ -1,12 +1,12 @@
-import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
-import { AppContext } from "../contexts/AppContext";
+import React, { useContext, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { AppContext } from '../contexts/AppContext';
 
 export const Register = () => {
   const context = useContext(AppContext);
   const [formValue, setFormValue] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
 
   const onChange = ({ target }) => {
@@ -16,7 +16,7 @@ export const Register = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     context.handleRegister(formValue.email, formValue.password);
-    setFormValue({ email: "", password: "" });
+    setFormValue({ email: '', password: '' });
   };
 
   return (
