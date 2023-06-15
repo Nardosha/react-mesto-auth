@@ -1,3 +1,5 @@
+import { checkResponse } from "./helpers";
+
 const BASE_URL = "https://auth.nomoreparties.co";
 
 export function register(email, password) {
@@ -8,13 +10,7 @@ export function register(email, password) {
     },
     body: JSON.stringify({ email, password }),
   })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Error ${res.message || res.status}`);
-    })
-    .catch(console.error);
+    .then(checkResponse)
 }
 
 export function authorize(email, password) {
@@ -25,13 +21,7 @@ export function authorize(email, password) {
     },
     body: JSON.stringify({ email, password }),
   })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Error ${res.message || res.status}`);
-    })
-    .catch(console.error);
+    .then(checkResponse)
 }
 
 export function checkToken(token) {
@@ -43,11 +33,5 @@ export function checkToken(token) {
       Authorization: `Bearer ${token}`,
     },
   })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Error ${res.message || res.status}`);
-    })
-    .catch(console.error);
+    .then(checkResponse)
 }

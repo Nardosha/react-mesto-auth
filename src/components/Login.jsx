@@ -1,7 +1,5 @@
 import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { AppContext } from "../contexts/AppContext";
-import * as auth from "../utils/auth";
 
 export const Login = () => {
   const [formValue, setFormValue] = useState({
@@ -9,7 +7,6 @@ export const Login = () => {
     password: "",
   });
 
-  const navigate = useNavigate();
   const context = useContext(AppContext);
   const onChange = ({ target }) => {
     setFormValue({ ...formValue, [target.name]: target.value });
@@ -17,18 +14,8 @@ export const Login = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-
-    auth
-      .authorize(formValue.email, formValue.password)
-      .then((res) => {
-        if (res?.token) {
-          localStorage.setItem("jwt", res.token);
-          setFormValue({ email: "", password: "" });
-          context.handleLogin(formValue);
-          navigate("/", { replace: true });
-        }
-      })
-      .catch(console.error);
+    context.handleLogin(formValue);
+    setFormValue({ email: "", password: "" });
   };
 
   return (
