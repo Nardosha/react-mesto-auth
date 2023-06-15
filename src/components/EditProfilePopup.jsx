@@ -1,7 +1,7 @@
 import { PopupWithForm } from './PopupWithForm';
 import React, { useContext, useEffect, useState } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { AppContext } from "../contexts/AppContext";
+import { AppContext } from '../contexts/AppContext';
 
 export const EditProfilePopup = ({ isOpen, onUpdateUser }) => {
   const currentUser = useContext(CurrentUserContext);
@@ -10,15 +10,15 @@ export const EditProfilePopup = ({ isOpen, onUpdateUser }) => {
   const [description, setDescription] = useState(currentUser.description || '');
   const { isLoading, closeAllPopups } = useContext(AppContext);
 
-  const _handleNameChange = e => {
+  const _handleNameChange = (e) => {
     setName(e.target.value);
   };
 
-  const _handleDescriptionChange = e => {
+  const _handleDescriptionChange = (e) => {
     setDescription(e.target.value);
   };
 
-  const _handleSubmit = e => {
+  const _handleSubmit = (e) => {
     e.preventDefault();
 
     onUpdateUser({
@@ -56,10 +56,7 @@ export const EditProfilePopup = ({ isOpen, onUpdateUser }) => {
             value={name}
             onChange={_handleNameChange}
           />
-          <span
-            className="form__input-error"
-            id="input_user_full_name-error"
-          ></span>
+          <span className="form__input-error" id="input_user_full_name-error"></span>
         </label>
 
         <label className="form__label" htmlFor="input_user_description">
@@ -76,10 +73,7 @@ export const EditProfilePopup = ({ isOpen, onUpdateUser }) => {
             value={description}
             onChange={_handleDescriptionChange}
           />
-          <span
-            className="form__input-error"
-            id="input_user_description-error"
-          ></span>
+          <span className="form__input-error" id="input_user_description-error"></span>
         </label>
       </fieldset>
     </PopupWithForm>

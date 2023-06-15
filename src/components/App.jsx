@@ -1,32 +1,32 @@
-import React, { useEffect, useState } from "react";
-import { Header } from "./Header";
-import { Footer } from "./Footer";
-import { Main } from "./Main";
-import { PopupWithForm } from "./PopupWithForm";
-import { ImagePopup } from "./ImagePopup";
-import { api } from "../utils/api";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import { EditProfilePopup } from "./EditProfilePopup";
-import { EditAvatarPopup } from "./EditAvatarPopup";
-import { AddPlacePopup } from "./AddPlacePopup";
-import { AppContext } from "../contexts/AppContext";
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import { Register } from "./Register";
-import { ProtectedRoute } from "./ProtectedRoute";
-import { Login } from "./Login";
-import { InfoTooltip } from "./InfoTooltip";
-import * as auth from "../utils/auth";
+import React, { useEffect, useState } from 'react';
+import { Header } from './Header';
+import { Footer } from './Footer';
+import { Main } from './Main';
+import { PopupWithForm } from './PopupWithForm';
+import { ImagePopup } from './ImagePopup';
+import { api } from '../utils/api';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { EditProfilePopup } from './EditProfilePopup';
+import { EditAvatarPopup } from './EditAvatarPopup';
+import { AddPlacePopup } from './AddPlacePopup';
+import { AppContext } from '../contexts/AppContext';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { Register } from './Register';
+import { ProtectedRoute } from './ProtectedRoute';
+import { Login } from './Login';
+import { InfoTooltip } from './InfoTooltip';
+import * as auth from '../utils/auth';
 
 function App() {
   const [authUser, setAuthUser] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
 
   const [currentUser, setCurrentUser] = useState({
-    name: "",
-    description: "",
-    avatar: "",
+    name: '',
+    description: '',
+    avatar: '',
     _id: null,
   });
 
@@ -116,9 +116,7 @@ function App() {
     api
       .changeLikeCardStatus(card._id, !isLiked)
       .then((newCard) => {
-        setCards((state) =>
-          state.map((card) => (card._id === newCard._id ? newCard : card))
-        );
+        setCards((state) => state.map((card) => (card._id === newCard._id ? newCard : card)));
       })
       .catch(console.error);
   };
@@ -127,9 +125,7 @@ function App() {
     api
       .deleteCard(deletedCard._id)
       .then(() => {
-        setCards((state) =>
-          state.filter((card) => card._id !== deletedCard._id)
-        );
+        setCards((state) => state.filter((card) => card._id !== deletedCard._id));
       })
       .catch(console.error);
   };
@@ -151,7 +147,7 @@ function App() {
   const handleRegister = (formData) => {
     if (!formData) {
       setIsInfoPopupOpen(true);
-      return
+      return;
     }
 
     auth
@@ -161,12 +157,15 @@ function App() {
           return;
         }
 
-        setIsInfoPopupOpen(true);
         setIsLoggedIn(true);
+        setIsInfoPopupOpen(true);
         setAuthUser({ email: formData.email, password: formData.password });
-        navigate("/sign-in", { replace: true });
+        navigate('/sign-in', { replace: true });
       })
-      .catch(console.error);
+      .catch(() => {
+        setIsLoggedIn(false);
+        setIsInfoPopupOpen(true);
+      });
   };
 
   const handleLogin = (formData) => {
@@ -176,11 +175,14 @@ function App() {
       .authorize(formData.email, formData.password)
       .then((res) => {
         if (res?.token) {
-          localStorage.setItem("jwt", res.token);
-          navigate("/", { replace: true });
+          localStorage.setItem('jwt', res.token);
+          navigate('/', { replace: true });
         }
       })
-      .catch(console.error);
+      .catch(() => {
+        setIsLoggedIn(false);
+        setIsInfoPopupOpen(true);
+      });
 
     setIsLoggedIn(true);
     setAuthUser({ email: formData.email, password: formData.password });
@@ -188,26 +190,28 @@ function App() {
   };
 
   const checkToken = () => {
-    const token = localStorage.getItem("jwt");
+    const token = localStorage.getItem('jwt');
+    if (!token) return Promise.reject('Токен отсутствует');
+
     return auth
       .checkToken(token)
       .then((res) => {
         if (!res) return;
 
         setIsLoggedIn(true);
-        navigate("/me", { replace: true });
+        navigate('/me', { replace: true });
       })
       .catch(console.error);
   };
 
   const handleSignOut = () => {
     setIsLoggedIn(false);
-    setAuthUser({ email: "", password: "" });
-    setCurrentUser({ name: "", description: "", avatar: "", _id: null });
+    setAuthUser({ email: '', password: '' });
+    setCurrentUser({ name: '', description: '', avatar: '', _id: null });
 
-    localStorage.removeItem("jwt");
+    localStorage.removeItem('jwt');
 
-    navigate("/", { replace: true });
+    navigate('/', { replace: true });
   };
 
   useEffect(() => {
@@ -242,11 +246,7 @@ function App() {
               <Route
                 path="/"
                 element={
-                  isLoggedIn ? (
-                    <Navigate to="/me" replace />
-                  ) : (
-                    <Navigate to="/sign-in" replace />
-                  )
+                  isLoggedIn ? <Navigate to="/me" replace /> : <Navigate to="/sign-in" replace />
                 }
               />
 
@@ -273,33 +273,17 @@ function App() {
             {isLoggedIn && <Footer />}
           </div>
 
-          <EditProfilePopup
-            isOpen={isEditProfilePopupOpen}
-            onUpdateUser={_handleUpdateUser}
-          />
+          <EditProfilePopup isOpen={isEditProfilePopupOpen} onUpdateUser={_handleUpdateUser} />
 
-          <AddPlacePopup
-            isOpen={isAddPlacePopupOpen}
-            onAddPlace={_handleAddPlaceSubmit}
-          />
+          <AddPlacePopup isOpen={isAddPlacePopupOpen} onAddPlace={_handleAddPlaceSubmit} />
 
-          <EditAvatarPopup
-            isOpen={isEditAvatarPopupOpen}
-            onUpdateAvatar={_handleUpdateAvatar}
-          />
+          <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onUpdateAvatar={_handleUpdateAvatar} />
 
-          <PopupWithForm
-            name="confirm"
-            title="Вы уверены?"
-            isOpen={isConfirmPopupOpen}
-          />
+          <PopupWithForm name="confirm" title="Вы уверены?" isOpen={isConfirmPopupOpen} />
 
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />
 
-          <InfoTooltip
-            type={isLoggedIn ? "success" : "error"}
-            isOpen={isInfoPopupOpen}
-          />
+          <InfoTooltip type={isLoggedIn ? 'success' : 'error'} isOpen={isInfoPopupOpen} />
         </CurrentUserContext.Provider>
       </AppContext.Provider>
     </div>

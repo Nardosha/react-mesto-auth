@@ -1,14 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
-import logo from "../images/logo.svg";
-import { AppContext } from "../contexts/AppContext";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useState } from 'react';
+import logo from '../images/logo.svg';
+import { AppContext } from '../contexts/AppContext';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 export const Header = () => {
   const context = useContext(AppContext);
   const location = useLocation();
 
   const setLocation = () => {
-    return !!(location.pathname === "/sign-in" || location.pathname === "/");
+    return !!(location.pathname === '/sign-in' || location.pathname === '/');
   };
 
   const [isLogging, setIsLogging] = useState(setLocation);
@@ -33,11 +33,7 @@ export const Header = () => {
       )}
 
       {context.isLoggedIn && (
-        <Link
-          to="/sign-in"
-          className="link header__link"
-          onClick={context.handleSignOut}
-        >
+        <Link to="/sign-in" className="link header__link" onClick={context.handleSignOut}>
           Выйти
         </Link>
       )}

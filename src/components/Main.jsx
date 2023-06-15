@@ -17,25 +17,14 @@ export const Main = ({
     <main className="page">
       <section className="profile">
         <div className="profile__info-container">
-          <button
-            className="profile__avatar-button"
-            type="button"
-            onClick={onEditAvatar}
-          >
-            <img
-              className="profile__avatar"
-              src={currentUser.avatar}
-              alt="Аватар"
-            />
+          <button className="profile__avatar-button" type="button" onClick={onEditAvatar}>
+            <img className="profile__avatar" src={currentUser.avatar} alt="Аватар" />
           </button>
           <div className="profile__settings">
             <h1 className="profile__full-name" data-user-field="userFullName">
               {currentUser.name}
             </h1>
-            <p
-              className="profile__description"
-              data-user-field="userDescription"
-            >
+            <p className="profile__description" data-user-field="userDescription">
               {currentUser.description}
             </p>
             <button
@@ -60,7 +49,7 @@ export const Main = ({
 
       <section className="content-photos">
         <ul className="content-photos__list">
-          {cards.map(card => (
+          {cards.map((card) => (
             <Card
               card={card}
               key={card._id}
