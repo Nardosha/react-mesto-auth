@@ -191,6 +191,8 @@ function App() {
 
   const checkToken = () => {
     const token = localStorage.getItem('jwt');
+    if (!token) return Promise.reject('Токен отсутствует');
+
     return auth
       .checkToken(token)
       .then((res) => {
