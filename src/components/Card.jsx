@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { cardOptions } from '../utils/constants';
 
 function Card({ card, onCardClick, onCardLike, onCardDelete }) {
   const currentUser = useContext(CurrentUserContext);
   const isOwn = card.owner._id === currentUser._id;
   const isLiked = card.likes.find(user => user._id === currentUser._id);
+  const buttonLikeActiveClass = 'photo-item__button-like_active';
 
   return (
     <li className="photo-item">
@@ -32,7 +32,7 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
         <div className="photo-item__like-stats">
           <button
             className={`icon-button photo-item__button-like ${
-              isLiked && cardOptions.buttonLikeActiveClass
+              isLiked && buttonLikeActiveClass
             }`}
             type="button"
             data-action="LIKE"

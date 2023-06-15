@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="07f6e39a-d70a-43c0-be90-db162fa3a4cd" name="Changes" comment="style: add new styles">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/auth.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Card.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Card.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/constants.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +86,7 @@
       <workItem from="1686602116136" duration="7106000" />
       <workItem from="1686691304761" duration="9689000" />
       <workItem from="1686727948485" duration="310000" />
-      <workItem from="1686816469012" duration="996000" />
+      <workItem from="1686816469012" duration="1356000" />
     </task>
     <task id="LOCAL-00001" summary="style: add new styles">
       <created>1686576680554</created>

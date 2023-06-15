@@ -1,4 +1,11 @@
-import { apiConfig } from './constants';
+const apiConfig = {
+  url: 'https://mesto.nomoreparties.co/v1',
+  cohort: 'cohort-64',
+  headers: {
+    authorization: 'bb9d3cad-fe83-4951-9df0-d4b1a4879bd4',
+    'Content-Type': 'application/json',
+  },
+};
 
 class Api {
   constructor(config) {
