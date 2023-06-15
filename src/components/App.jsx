@@ -161,13 +161,15 @@ function App() {
           return;
         }
 
-        setIsInfoPopupOpen(true);
         setIsLoggedIn(true);
+        setIsInfoPopupOpen(true);
         setAuthUser({ email: formData.email, password: formData.password });
         navigate("/sign-in", { replace: true });
       })
-      .catch(console.error);
-  };
+        .catch(() => {
+          setIsLoggedIn(false);
+          setIsInfoPopupOpen(true);
+        });  };
 
   const handleLogin = (formData) => {
     if (!formData) return;
@@ -180,7 +182,10 @@ function App() {
           navigate("/", { replace: true });
         }
       })
-      .catch(console.error);
+      .catch(() => {
+        setIsLoggedIn(false);
+        setIsInfoPopupOpen(true);
+      });
 
     setIsLoggedIn(true);
     setAuthUser({ email: formData.email, password: formData.password });
