@@ -1,11 +1,9 @@
 import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AppContext } from "../contexts/AppContext";
-import * as auth from "../utils/auth";
 
 export const Register = () => {
   const context = useContext(AppContext);
-  const navigate = useNavigate();
   const [formValue, setFormValue] = useState({
     email: "",
     password: "",
@@ -17,18 +15,8 @@ export const Register = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    auth
-      .register(formValue.email, formValue.password)
-      .then((res) => {
-        if (!res?.data) {
-          context.handleRegister(null);
-          return;
-        }
-
-        context.handleRegister(formValue.email, formValue.password);
-        navigate("/sign-in", { replace: true });
-      })
-      .catch(console.error);
+    context.handleRegister(formValue.email, formValue.password);
+    setFormValue({ email: "", password: "" });
   };
 
   return (

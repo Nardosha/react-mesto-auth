@@ -148,20 +148,42 @@ function App() {
       .catch(console.error);
   };
 
-  const handleRegister = (userData) => {
-    if (!userData) {
+  const handleRegister = (formData) => {
+    if (!formData) {
       setIsInfoPopupOpen(true);
       return
     }
-    setIsInfoPopupOpen(true);
-    setIsLoggedIn(true);
-    setAuthUser({ email: userData.email, password: userData.password });
+
+    auth
+      .register(formData.email, formData.password)
+      .then((res) => {
+        if (!res?.data) {
+          return;
+        }
+
+        setIsInfoPopupOpen(true);
+        setIsLoggedIn(true);
+        setAuthUser({ email: formData.email, password: formData.password });
+        navigate("/sign-in", { replace: true });
+      })
+      .catch(console.error);
   };
 
-  const handleLogin = (userData) => {
-    if (!userData) return;
+  const handleLogin = (formData) => {
+    if (!formData) return;
+
+    auth
+      .authorize(formData.email, formData.password)
+      .then((res) => {
+        if (res?.token) {
+          localStorage.setItem("jwt", res.token);
+          navigate("/", { replace: true });
+        }
+      })
+      .catch(console.error);
+
     setIsLoggedIn(true);
-    setAuthUser({ email: userData.email, password: userData.password });
+    setAuthUser({ email: formData.email, password: formData.password });
     loadData();
   };
 
