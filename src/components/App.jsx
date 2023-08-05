@@ -170,7 +170,7 @@ function App() {
     if (!formData) return;
 
     try {
-      const { data: user } = await auth.authorize(formData.email, formData.password);
+      const { data: user } = await auth.login(formData.email, formData.password);
 
       if (user?.token) {
         localStorage.setItem('jwt', user.token);
