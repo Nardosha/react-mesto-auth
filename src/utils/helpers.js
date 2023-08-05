@@ -2,5 +2,5 @@ export const checkResponse = (response) => {
   if (response.ok) {
     return response.json();
   }
-  return Promise.reject(`Error ${response.message || response.status}`);
+  return Promise.reject(response);
 };

@@ -1,9 +1,9 @@
+import { BASE_URL } from './auth';
+
 const apiConfig = {
-  // url: 'https://mesto.nomoreparties.co/v1',
-  url: 'http://localhost:3000',
-  // cohort: 'cohort-64',
+  url: BASE_URL,
   headers: {
-    authorization: `Bearer ${localStorage.getItem('jwt')}`,
+    Accept: 'application/json',
     'Content-Type': 'application/json',
   },
 };
@@ -17,6 +17,7 @@ class Api {
   loadUserInfo() {
     return fetch(`${this.url}/users/me`, {
       headers: this.headers,
+      credentials: 'include',
     })
       .then(this._handleResult)
       .catch((err) => {
@@ -28,6 +29,7 @@ class Api {
     return fetch(`${this.url}/users/me`, {
       method: 'PATCH',
       headers: this.headers,
+      credentials: 'include',
       body: JSON.stringify(userInfo),
     }).then(this._handleResult);
   }
@@ -36,6 +38,7 @@ class Api {
     return fetch(`${this.url}/users/me/avatar`, {
       method: 'PATCH',
       headers: this.headers,
+      credentials: 'include',
       body: JSON.stringify(avatar),
     }).then(this._handleResult);
   }
@@ -43,6 +46,7 @@ class Api {
   getInitialCards() {
     return fetch(`${this.url}/cards`, {
       headers: this.headers,
+      credentials: 'include',
     }).then(this._handleResult);
   }
 
@@ -50,6 +54,7 @@ class Api {
     return fetch(`${this.url}/cards`, {
       method: 'POST',
       headers: this.headers,
+      credentials: 'include',
       body: JSON.stringify(cardParams),
     }).then(this._handleResult);
   }
@@ -58,6 +63,7 @@ class Api {
     return fetch(`${this.url}/cards/${cardId}`, {
       method: 'DELETE',
       headers: this.headers,
+      credentials: 'include',
     }).then(this._handleResult);
   }
 
@@ -72,6 +78,7 @@ class Api {
     return fetch(`${this.url}/cards/${cardId}/likes`, {
       method: 'PUT',
       headers: this.headers,
+      credentials: 'include',
     }).then(this._handleResult);
   }
 
@@ -79,6 +86,7 @@ class Api {
     return fetch(`${this.url}/cards/${cardId}/likes`, {
       method: 'DELETE',
       headers: this.headers,
+      credentials: 'include',
     }).then(this._handleResult);
   }
 

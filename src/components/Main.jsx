@@ -42,7 +42,8 @@ export const Main = React.memo(
 
         <section className="content-photos">
           <ul className="content-photos__list">
-            {cards.map((card) => (
+
+              {!cards.length ? 'Добавьте карточки :)' : cards.map((card) => (
               <Card
                 card={card}
                 key={card._id}
