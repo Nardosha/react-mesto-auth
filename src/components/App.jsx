@@ -98,41 +98,42 @@ function App() {
 
   const _handleAddPlaceSubmit = async (card) => {
     const submitAddPlace = async () => {
-      const {data: newCard} = await api.createCard(card);
+      const { data: newCard } = await api.createCard(card);
       setCards([newCard, ...cards]);
     };
 
     await handleRequest(submitAddPlace);
   };
 
-  const _handleCardLike = (card) => {
-    const isLiked = card.likes.find((user) => user._id === currentUser._id);
+  const _handleCardLike = async (card) => {
+    try {
+      const isLiked = card.likes.find((user) => user._id === currentUser._id);
+      const { data: newCard } = await api.changeLikeCardStatus(card._id, !isLiked);
 
-    api
-      .changeLikeCardStatus(card._id, !isLiked)
-      .then((newCard) => {
-        setCards((state) => state.map((card) => (card._id === newCard._id ? newCard : card)));
-      })
-      .catch(console.error);
+      setCards((state) => state.map((card) => (card._id === newCard._id ? newCard : card)));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const _handleDeleteCard = (deletedCard) => {
-    api
-      .deleteCard(deletedCard._id)
-      .then(() => {
-        setCards((state) => state.filter((card) => card._id !== deletedCard._id));
-      })
-      .catch(console.error);
+  const _handleDeleteCard = async (deletedCard) => {
+    try {
+      await api.deleteCard(deletedCard._id);
+      setCards((state) => state.filter((card) => card._id !== deletedCard._id));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const loadData = async () => {
     try {
-      const user = await api.loadUserInfo();
+      const { data: user } = await api.loadUserInfo();
       const { data: cards } = await api.getInitialCards();
 
       if (user) {
         setCurrentUser({
           name: user.name,
+          email: user.email,
           about: user.about,
           avatar: user.avatar,
           _id: user._id,
@@ -145,12 +146,12 @@ function App() {
   };
 
   const handleRegister = async (formData) => {
-    if (!formData) {
-      setIsInfoPopupOpen(true);
-      return;
-    }
-
     try {
+      if (!formData) {
+        setIsInfoPopupOpen(true);
+        return;
+      }
+
       const res = await auth.register(formData.email, formData.password);
       if (!res?.data) {
         return;
@@ -160,7 +161,10 @@ function App() {
       setIsInfoPopupOpen(true);
       setAuthUser({ email: formData.email, password: formData.password });
       navigate('/signin', { replace: true });
-    } catch (e) {
+    } catch (err) {
+      if (err.status === 409) {
+        console.log('Такой пользователь уже существует');
+      }
       setIsLoggedIn(false);
       setIsInfoPopupOpen(true);
     }
@@ -170,7 +174,7 @@ function App() {
     if (!formData) return;
 
     try {
-      const user = await auth.authorize(formData.email, formData.password);
+      const { data: user } = await auth.authorize(formData.email, formData.password);
 
       if (user?.token) {
         localStorage.setItem('jwt', user.token);
@@ -180,6 +184,7 @@ function App() {
         setCurrentUser({
           ...currentUser,
           name: user.name,
+          email: user.email,
           about: user.about,
           avatar: user.avatar,
           _id: user._id,
@@ -208,6 +213,7 @@ function App() {
         setCurrentUser({
           ...currentUser,
           name: user.name,
+          email: user.email,
           about: user.about,
           avatar: user.avatar,
           _id: user._id,
@@ -226,7 +232,7 @@ function App() {
   const handleSignOut = () => {
     setIsLoggedIn(false);
     setAuthUser({ email: '', password: '' });
-    setCurrentUser({ name: '', about: '', avatar: '', _id: null });
+    setCurrentUser({ name: '', email: '', about: '', avatar: '', _id: null });
 
     localStorage.removeItem('jwt');
 
@@ -237,11 +243,10 @@ function App() {
     async function fetch() {
       try {
         const user = await checkAuthToken();
-        console.warn(333, 'useEffect checkAuthToken ', user);
+
         if (user) {
           const { data: cards } = await api.getInitialCards();
           setCards([...cards]);
-          // setCurrentUser({ ...user });
         }
       } catch (err) {
         console.log(err);
