@@ -19,12 +19,9 @@ import * as auth from '../utils/auth';
 
 function App() {
   const navigate = useNavigate();
-  const [authUser, setAuthUser] = useState({
-    email: '',
-    password: '',
-  });
   const [currentUser, setCurrentUser] = useState({
     name: '',
+    email: '',
     about: '',
     avatar: '',
     _id: null,
@@ -88,9 +85,9 @@ function App() {
 
   const _handleUpdateAvatar = async ({ avatar }) => {
     const submitEditUserAvatar = async () => {
-      const { data: newAvatar } = await api.editUserAvatar({ avatar });
+      const { data: user } = await api.editUserAvatar({ avatar });
 
-      setCurrentUser({ ...currentUser, avatar: newAvatar });
+      setCurrentUser({ ...currentUser, avatar: user.avatar });
     };
 
     await handleRequest(submitEditUserAvatar);
@@ -159,7 +156,6 @@ function App() {
 
       setIsLoggedIn(true);
       setIsInfoPopupOpen(true);
-      setAuthUser({ email: formData.email, password: formData.password });
       navigate('/signin', { replace: true });
     } catch (err) {
       if (err.status === 409) {
@@ -180,7 +176,6 @@ function App() {
         localStorage.setItem('jwt', user.token);
         navigate('/', { replace: true });
         setIsLoggedIn(true);
-        setAuthUser({ email: formData.email, password: formData.password });
         setCurrentUser({
           ...currentUser,
           name: user.name,
@@ -201,7 +196,6 @@ function App() {
     try {
       const token = localStorage.getItem('jwt');
       if (!token) {
-        console.log('APP:checkAuthToken Токена нет!!!', token);
         return;
       }
 
@@ -231,7 +225,6 @@ function App() {
 
   const handleSignOut = () => {
     setIsLoggedIn(false);
-    setAuthUser({ email: '', password: '' });
     setCurrentUser({ name: '', email: '', about: '', avatar: '', _id: null });
 
     localStorage.removeItem('jwt');
