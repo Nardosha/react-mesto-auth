@@ -1,22 +1,27 @@
 const apiConfig = {
-  url: 'https://mesto.nomoreparties.co/v1',
-  cohort: 'cohort-64',
+  // url: 'https://mesto.nomoreparties.co/v1',
+  url: 'http://localhost:3000',
+  // cohort: 'cohort-64',
   headers: {
-    authorization: 'bb9d3cad-fe83-4951-9df0-d4b1a4879bd4',
+    authorization: `Bearer ${localStorage.getItem('jwt')}`,
     'Content-Type': 'application/json',
   },
 };
 
 class Api {
   constructor(config) {
-    this.url = `${config.url}/${config.cohort}`;
+    this.url = `${config.url}`;
     this.headers = config.headers;
   }
 
   loadUserInfo() {
     return fetch(`${this.url}/users/me`, {
       headers: this.headers,
-    }).then(this._handleResult);
+    })
+      .then(this._handleResult)
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   editUserInfo(userInfo) {
