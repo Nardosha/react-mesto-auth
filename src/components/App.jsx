@@ -18,20 +18,18 @@ import { InfoTooltip } from './InfoTooltip';
 import * as auth from '../utils/auth';
 
 function App() {
+  const navigate = useNavigate();
   const [authUser, setAuthUser] = useState({
     email: '',
     password: '',
   });
-
   const [currentUser, setCurrentUser] = useState({
     name: '',
-    description: '',
+    about: '',
     avatar: '',
     _id: null,
   });
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate();
   const [cards, setCards] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -67,47 +65,44 @@ function App() {
     setSelectedCard(card);
   };
 
-  const handleRequest = (request) => {
+  const handleRequest = async (request) => {
     setIsLoading(true);
-
-    request()
-      .then(closeAllPopups)
-      .catch(console.error)
-      .finally(() => setIsLoading(false));
+    try {
+      await request();
+      closeAllPopups();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const _handleUpdateUser = ({ name, description }) => {
-    const submitEditUserProfile = () => {
-      return api.editUserInfo({ name, about: description }).then((res) => {
-        setCurrentUser({
-          ...currentUser,
-          name: res.name,
-          description: res.about,
-        });
-      });
+  const _handleUpdateUser = async ({ name, about }) => {
+    const submitEditUserProfile = async () => {
+      const { data: user } = await api.editUserInfo({ name, about });
+      await setCurrentUser({ ...currentUser, name: user.name, about: user.about });
     };
 
-    handleRequest(submitEditUserProfile);
+    await handleRequest(submitEditUserProfile);
   };
 
-  const _handleUpdateAvatar = ({ avatar }) => {
-    const submitEditUserAvatar = () => {
-      return api.editUserAvatar({ avatar }).then((user) => {
-        setCurrentUser({ ...currentUser, avatar: user.avatar });
-      });
+  const _handleUpdateAvatar = async ({ avatar }) => {
+    const submitEditUserAvatar = async () => {
+      const { data: newAvatar } = await api.editUserAvatar({ avatar });
+
+      setCurrentUser({ ...currentUser, avatar: newAvatar });
     };
 
-    handleRequest(submitEditUserAvatar);
+    await handleRequest(submitEditUserAvatar);
   };
 
-  const _handleAddPlaceSubmit = (card) => {
-    const submitAddPlace = () => {
-      return api.createCard(card).then((newCard) => {
-        setCards([newCard, ...cards]);
-      });
+  const _handleAddPlaceSubmit = async (card) => {
+    const submitAddPlace = async () => {
+      const {data: newCard} = await api.createCard(card);
+      setCards([newCard, ...cards]);
     };
 
-    handleRequest(submitAddPlace);
+    await handleRequest(submitAddPlace);
   };
 
   const _handleCardLike = (card) => {
@@ -130,84 +125,108 @@ function App() {
       .catch(console.error);
   };
 
-  const loadData = () => {
-    Promise.all([api.loadUserInfo(), api.getInitialCards()])
-      .then(([userInfo, cards]) => {
+  const loadData = async () => {
+    try {
+      const user = await api.loadUserInfo();
+      const { data: cards } = await api.getInitialCards();
+
+      if (user) {
         setCurrentUser({
-          name: userInfo.name,
-          description: userInfo.about,
-          avatar: userInfo.avatar,
-          _id: userInfo._id,
+          name: user.name,
+          about: user.about,
+          avatar: user.avatar,
+          _id: user._id,
         });
         setCards([...cards]);
-      })
-      .catch(console.error);
+      }
+    } catch (e) {
+      console.log('Юзер или карточки не загрузились', e);
+    }
   };
 
-  const handleRegister = (formData) => {
+  const handleRegister = async (formData) => {
     if (!formData) {
       setIsInfoPopupOpen(true);
       return;
     }
 
-    auth
-      .register(formData.email, formData.password)
-      .then((res) => {
-        if (!res?.data) {
-          return;
-        }
+    try {
+      const res = await auth.register(formData.email, formData.password);
+      if (!res?.data) {
+        return;
+      }
 
-        setIsLoggedIn(true);
-        setIsInfoPopupOpen(true);
-        setAuthUser({ email: formData.email, password: formData.password });
-        navigate('/sign-in', { replace: true });
-      })
-      .catch(() => {
-        setIsLoggedIn(false);
-        setIsInfoPopupOpen(true);
-      });
+      setIsLoggedIn(true);
+      setIsInfoPopupOpen(true);
+      setAuthUser({ email: formData.email, password: formData.password });
+      navigate('/signin', { replace: true });
+    } catch (e) {
+      setIsLoggedIn(false);
+      setIsInfoPopupOpen(true);
+    }
   };
 
-  const handleLogin = (formData) => {
+  const handleLogin = async (formData) => {
     if (!formData) return;
 
-    auth
-      .authorize(formData.email, formData.password)
-      .then((res) => {
-        if (res?.token) {
-          localStorage.setItem('jwt', res.token);
-          navigate('/', { replace: true });
-        }
-      })
-      .catch(() => {
-        setIsLoggedIn(false);
-        setIsInfoPopupOpen(true);
-      });
+    try {
+      const user = await auth.authorize(formData.email, formData.password);
 
-    setIsLoggedIn(true);
-    setAuthUser({ email: formData.email, password: formData.password });
-    loadData();
+      if (user?.token) {
+        localStorage.setItem('jwt', user.token);
+        navigate('/', { replace: true });
+        setIsLoggedIn(true);
+        setAuthUser({ email: formData.email, password: formData.password });
+        setCurrentUser({
+          ...currentUser,
+          name: user.name,
+          about: user.about,
+          avatar: user.avatar,
+          _id: user._id,
+        });
+        await loadData();
+      }
+    } catch (e) {
+      setIsLoggedIn(false);
+      setIsInfoPopupOpen(true);
+    }
   };
 
-  const checkToken = () => {
-    const token = localStorage.getItem('jwt');
-    if (!token) return Promise.reject('Токен отсутствует');
+  const checkAuthToken = async () => {
+    try {
+      const token = localStorage.getItem('jwt');
+      if (!token) {
+        console.log('APP:checkAuthToken Токена нет!!!', token);
+        return;
+      }
 
-    return auth
-      .checkToken(token)
-      .then((res) => {
-        if (!res) return;
+      const { data: user } = await auth.checkToken(token);
 
+      if (user) {
         setIsLoggedIn(true);
+        setIsLoading(true);
+        setCurrentUser({
+          ...currentUser,
+          name: user.name,
+          about: user.about,
+          avatar: user.avatar,
+          _id: user._id,
+        });
         navigate('/me', { replace: true });
-      })
-      .catch(console.error);
+
+        return user;
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSignOut = () => {
     setIsLoggedIn(false);
     setAuthUser({ email: '', password: '' });
-    setCurrentUser({ name: '', description: '', avatar: '', _id: null });
+    setCurrentUser({ name: '', about: '', avatar: '', _id: null });
 
     localStorage.removeItem('jwt');
 
@@ -215,15 +234,21 @@ function App() {
   };
 
   useEffect(() => {
-    checkToken()
-      .then(() => {
-        loadData();
-      })
-      .catch(console.error);
+    async function fetch() {
+      try {
+        const user = await checkAuthToken();
+        console.warn(333, 'useEffect checkAuthToken ', user);
+        if (user) {
+          const { data: cards } = await api.getInitialCards();
+          setCards([...cards]);
+          // setCurrentUser({ ...user });
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
 
-    return () => {
-      setIsLoggedIn(false);
-    };
+    fetch();
   }, []);
 
   return (
@@ -240,18 +265,18 @@ function App() {
       >
         <CurrentUserContext.Provider value={currentUser}>
           <div className="wrapper">
-            <Header />
+            <Header isLoggedIn={isLoggedIn} handleSignOut={handleSignOut} />
 
             <Routes>
               <Route
                 path="/"
                 element={
-                  isLoggedIn ? <Navigate to="/me" replace /> : <Navigate to="/sign-in" replace />
+                  isLoggedIn ? <Navigate to="/me" replace /> : <Navigate to="/signin" replace />
                 }
               />
 
-              <Route path="/sign-up" element={<Register />} />
-              <Route path="/sign-in" element={<Login />} />
+              <Route path="/signup" element={<Register />} />
+              <Route path="/signin" element={<Login />} />
 
               <Route
                 path="/me"

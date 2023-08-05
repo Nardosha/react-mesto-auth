@@ -1,6 +1,7 @@
 import { checkResponse } from './helpers';
 
-const BASE_URL = 'https://auth.nomoreparties.co';
+// const BASE_URL = 'https://auth.nomoreparties.co';
+const BASE_URL = 'http://localhost:3000';
 
 export function register(email, password) {
   return fetch(`${BASE_URL}/signup`, {
@@ -19,7 +20,7 @@ export function authorize(email, password) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ email, password }),
-  }).then(checkResponse);
+  }).then(checkResponse)
 }
 
 export function checkToken(token) {
