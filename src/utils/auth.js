@@ -1,7 +1,7 @@
 import { checkResponse } from './helpers';
 
-export const BASE_URL = 'https://api.purple.unicorn.nomoreparties.co';
-// export const BASE_URL = 'http://localhost:3000';
+// export const BASE_URL = 'https://api.purple.unicorn.nomoreparties.co';
+export const BASE_URL = 'http://localhost:3000';
 
 export function register(email, password) {
   return fetch(`${BASE_URL}/signup`, {
