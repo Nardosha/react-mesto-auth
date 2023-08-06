@@ -1,7 +1,6 @@
 import { checkResponse } from './helpers';
 
 export const BASE_URL = 'https://api.purple.unicorn.nomoreparties.co';
-// const BASE_URL = 'http://localhost:3000';
 
 export function register(email, password) {
   return fetch(`${BASE_URL}/signup`, {
@@ -24,7 +23,18 @@ export function login(email, password) {
   }).then(checkResponse);
 }
 
-export function checkToken(token) {
+
+export function logout() {
+  return fetch(`${BASE_URL}/signout`, {
+    method: 'DELETE',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }).then(checkResponse);
+}
+
+export function checkToken() {
   return fetch(`${BASE_URL}/users/me`, {
     method: 'GET',
     headers: {
