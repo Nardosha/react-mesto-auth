@@ -195,7 +195,6 @@ function App() {
     try {
       const { data: user } = await auth.checkToken();
 
-      console.log(user)
       if (user) {
         setIsLoggedIn(true);
         setIsLoading(true);
@@ -209,7 +208,6 @@ function App() {
         setUserEmail(user.email)
         navigate('/me', { replace: true });
         await loadData()
-        return user;
       }
     } catch (err) {
       console.error(err);

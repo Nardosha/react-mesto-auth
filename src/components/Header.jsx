@@ -11,7 +11,6 @@ export const Header = React.memo(({ isLoggedIn, handleSignOut, userEmail }) => {
 
   const isLogging = useRef(setLocation());
 
-    console.log('HEADER', isLoggedIn)
   return (
     <header className="header">
       <img className="header__logo" src={logo} alt="Логотип Mesto" />
