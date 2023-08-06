@@ -21,11 +21,11 @@ function App() {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState({
     name: '',
-    email: '',
     about: '',
     avatar: '',
     _id: null,
   });
+  const [userEmail, setUserEmail] = useState('')
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cards, setCards] = useState([]);
 
@@ -130,7 +130,6 @@ function App() {
       if (user) {
         setCurrentUser({
           name: user.name,
-          email: user.email,
           about: user.about,
           avatar: user.avatar,
           _id: user._id,
@@ -179,11 +178,11 @@ function App() {
         setCurrentUser({
           ...currentUser,
           name: user.name,
-          email: user.email,
           about: user.about,
           avatar: user.avatar,
           _id: user._id,
         });
+        setUserEmail(user.email)
         await loadData();
       }
     } catch (e) {
@@ -196,19 +195,20 @@ function App() {
     try {
       const { data: user } = await auth.checkToken();
 
+      console.log(user)
       if (user) {
         setIsLoggedIn(true);
         setIsLoading(true);
         setCurrentUser({
           ...currentUser,
           name: user.name,
-          email: user.email,
           about: user.about,
           avatar: user.avatar,
           _id: user._id,
         });
+        setUserEmail(user.email)
         navigate('/me', { replace: true });
-
+        await loadData()
         return user;
       }
     } catch (err) {
@@ -219,34 +219,19 @@ function App() {
   };
 
   const handleSignOut = async () => {
-      try {
+    try {
       await auth.logout();
       setIsLoggedIn(false);
-      setCurrentUser({ name: '', email: '', about: '', avatar: '', _id: null });
+      setCurrentUser({ name: '',  about: '', avatar: '', _id: null });
+      setUserEmail('');
       navigate('/signin', { replace: true });
-
     } catch (err) {
-       console.error((err));
-       setIsInfoPopupOpen(true);
+      console.error(err);
     }
   };
 
   useEffect(() => {
-    async function fetch() {
-      try {
-        const user = await checkAuthToken();
-
-        if (user) {
-          const { data: cards } = await api.getInitialCards();
-          setCards([...cards]);
-        }
-      } catch (err) {
-        console.log(err);
-        setIsInfoPopupOpen(true);
-      }
-    }
-
-    fetch();
+    checkAuthToken()
   }, []);
 
   return (
@@ -263,7 +248,7 @@ function App() {
       >
         <CurrentUserContext.Provider value={currentUser}>
           <div className="wrapper">
-            <Header isLoggedIn={isLoggedIn} handleSignOut={handleSignOut} />
+            <Header isLoggedIn={isLoggedIn} handleSignOut={handleSignOut} userEmail={userEmail}/>
 
             <Routes>
               <Route
